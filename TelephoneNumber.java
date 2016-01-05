@@ -56,7 +56,7 @@ public class TelephoneNumber {
 
         // 각 자리에 대하여 자신이 표현할 수 있는 모든 문자의 조합을 구하고
         // 하위(자신의 오른쪽) 번호들의 조합들을 수행한다.
-        for(int i = 1; i < 3; i++){
+        for(int i = 1; i <= 3; i++){
             result[digit] = getCharKey(phoneNum[digit], i);
             printWords(digit + 1);
 
@@ -73,5 +73,43 @@ public class TelephoneNumber {
                                     {' ','T', 'U', 'V'}, {' ','W', 'X', 'Y'}};
 
         return phonemap[telephonekey][place];
+    }
+
+    // 전화번호 문자 반복 버전
+    public void printWordIteration(){
+
+        // 문자 초기화
+        for(int i = 0; i < phoneNum.length; i++)
+            result[i] = getCharKey(phoneNum[i], 1);
+
+        // 무한 반복
+        while(true){
+            print(); // 출력
+
+            // 전화번호 뒤에서 부터 종주
+            for(int i = phoneNum.length - 1; i >= -1; i--){
+                if(i == - 1) return; // 전화번호 처음까지 지났다면 종료
+
+                if(result[i] == getCharKey(phoneNum[i], 3)) // 3가지 모든 문자를 순회했다면
+                    result[i] = getCharKey(phoneNum[i], 1); // 다시 첫번째 문자로 초기화
+                else if(result[i] == getCharKey(phoneNum[i], 1)) { // 첫번째를 수행한 후
+                    result[i] = getCharKey(phoneNum[i], 2); // 두번째로 넘어감
+                    break; // 출력문으로 간 후 다시 제일 뒤로
+                }
+                else if(result[i] == getCharKey(phoneNum[i], 2)) { // 두번째를 수행한 후
+                    result[i] = getCharKey(phoneNum[i], 3); // 세번째로 넘어감
+                    break; // 출력문으로 간 후 다시 제일 뒤로
+                }
+            }
+
+        }
+    }
+
+    // 결과 출력 함수
+    private void print(){
+        for(int i = 0; i < phoneNum.length; i++){
+            System.out.print(result[i]);
+        }
+        System.out.println();
     }
 }
